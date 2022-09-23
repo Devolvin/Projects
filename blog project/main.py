@@ -2,7 +2,6 @@ from flask import Flask, render_template, redirect, url_for, flash
 
 app = Flask(__name__)
 
-# github repo ekle!!!
 
 @app.route("/")
 def index():
