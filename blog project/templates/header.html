@@ -41,6 +41,7 @@
             </li>
           </ul>
             <ul class="navbar-nav ms-auto">
+              {% if not current_user.is_authenticated %}
                 <li id="nav-register" class="nav-item me-3">
                     <a class="nav-link" href="{{url_for('register')}}">
                         Register
@@ -51,6 +52,11 @@
                         Login
                     </a>
                 </li>
+              {% else %}
+              <li id="nav-logout" class="nav-item me-5">
+                <a class="nav-link" href="{{url_for('logout')}}">Log Out</a>
+              </li>
+              {% endif %}
             </ul>
 
         </div>

@@ -32,6 +32,7 @@
 
     /* Page Header */
 
+
 .page-header{
       width: 100%; //fallback
       width: 100vw;
@@ -55,7 +56,38 @@
   margin-top:10%;
 }
 
+
+    /* Post Preview */
+
+
+.post-preview{
+  background-color:#e6e6e6;
+  margin: 2% 0%;
+  border-radius:10px;
+  box-shadow: 1px 1px 2rem rgba(0, 0, 0, 0.1);
+}
+
+.post-preview-link {
+  text-decoration:none;
+  color: #212530;
+}
+
+.post-preview-link:hover, .post-preview-link:focus{
+  text-decoration: underline;
+  color: #008699;
+}
+
+.post-subtitle{
+  font-size:1.5rem;
+  font-weight:300;
+}
+
+.create-post-btn {
+  margin: 2% 0%;
+}
+
     /* Flashed messages */
+
 
 .flashed_message{
   font-size:1.5rem;

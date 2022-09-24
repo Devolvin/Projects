@@ -1,0 +1,32 @@
+
+{% import "bootstrap/wtf.html" as wtf %}
+{% include "header.html" %}
+
+  <!-- Page Header -->
+<header class="page-header" style="background-image:linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+  url('https://cdn.pixabay.com/photo/2016/12/02/02/09/idea-1876658_960_720.jpg')">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="site-heading text-center" >
+            <h1 class="page-header-heading mb-3"style="color:white"> Create a Post! </h1>
+            <span class="subheading" style="color:white"> Sharing is caring </span>
+          </div>
+        </div>
+      </div>
+    </div>
+</header>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-md-10 mx-auto">
+        {{ ckeditor.load() }}
+        {{ ckeditor.config(name='body') }}
+        {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "primary"}) }}
+      </div>
+    </div>
+  </div>
+
+
+
+{% include "footer.html" %}

@@ -1,17 +1,19 @@
 from flask import Flask, render_template, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
-from flask_login import UserMixin, login_user, LoginManager
+from flask_login import UserMixin, login_user, LoginManager, current_user, login_required, logout_user
 from flask_bootstrap import Bootstrap
-from forms import RegisterForm , LoginForm
+from forms import RegisterForm , LoginForm , CreatePostForm
 from werkzeug.security import generate_password_hash, check_password_hash
-
+from flask_ckeditor import CKEditor
+from datetime import date
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'q#f12]4b\J5VVc419F2F]pU'
 Bootstrap(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
+ckeditor = CKEditor(app)
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -63,7 +65,8 @@ db.create_all()
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    posts = BlogPost.query.all()
+    return render_template("index.html", posts=posts)
 
 @app.route("/register", methods=["GET","POST"])
 def register():
@@ -105,6 +108,30 @@ def login():
         login_user(user)
         return redirect(url_for("index"))
     return render_template("login.html",form=form)
+
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for("index"))
+
+@app.route("/new_post", methods=["GET","POST"])
+@login_required
+def add_new_post():
+    print(current_user)
+    form = CreatePostForm()
+    if form.validate_on_submit():
+        new_post = BlogPost(
+            title = form.title.data,
+            subtitle = form.subtitle.data,
+            body = form.body.data,
+            author = current_user,
+            date = date.today().strftime("%B %d, %Y")
+        )
+        db.session.add(new_post)
+        db.session.commit()
+        return redirect(url_for("index"))
+    return render_template("make_post.html", form=form)
 
 
 
