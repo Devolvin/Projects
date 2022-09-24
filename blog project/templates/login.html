@@ -1,0 +1,30 @@
+{% import "bootstrap/wtf.html" as wtf %}
+{% include "header.html" %}
+
+  <!-- Page Header -->
+  <header class="page-header" style="background-image:linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+  url('https://cdn.pixabay.com/photo/2017/05/22/23/37/oasis-2335767_960_720.jpg')">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="site-heading text-center" >
+            <h1 class="page-header-heading mb-3"style="color:white"> Log In! </h1>
+            <span class="subheading" style="color:white"> Welcome back, missed you</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="container main-form">
+    <div class="row">
+      <div class="col-lg-8 col-md-10 mx-auto">
+
+       {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "primary"}) }}
+
+      </div>
+    </div>
+  </div>
+
+
+{% include "footer.html" %}
