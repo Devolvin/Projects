@@ -1,4 +1,3 @@
-
     /* Navbar */
 
 .main-nav-untoggled{
@@ -20,6 +19,7 @@
     font-family: 'Nunito', sans-serif;
     font-weight: 900;
     font-size: 2.1rem;
+    color:lightgray;
 }
 
 .nav-link {
@@ -30,30 +30,45 @@
 }
 
 
-
     /* Page Header */
 
 .page-header{
       width: 100%; //fallback
       width: 100vw;
-      min-height: 40vh;
-      max-height: 40%;
+      min-height: 60vh;
+      max-height: 60%;
       overflow: hidden;
       background-size: cover;
       background-position: center;
     }
 
 .page-header-heading{
-  font-size:3rem;
+  font-size:5rem;
   font-family:'Rubik Dirt', cursive;
 }
 
 .subheading{
-  font-size:1.25rem;
+  font-size:1.5rem;
 }
 
 .site-heading{
-  margin-top:7%;
+  margin-top:10%;
+}
+
+
+    /* Forms */
+
+
+.main-form{
+  margin-top:1%;
+}
+
+
+    /* Footer */
+
+
+footer{
+    margin-top:3%;
 }
 
 

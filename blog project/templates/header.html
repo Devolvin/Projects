@@ -27,14 +27,14 @@
   <body>
     <nav id="main-nav" class="navbar navbar-expand-lg navbar-transparent main-nav-untoggled">
       <div class="container-fluid">
-        <a class="navbar-brand mx-5" href="#">Blawg</a>
+        <a class="navbar-brand mx-5" href="{{url_for('index')}}">Blavg</a>
         <button onclick="navbar-visible" class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav mx-2">
             <li class="nav-item">
-              <a class="nav-link" href="#">Home</a>
+              <a class="nav-link" href="#">Posts</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">About</a>
@@ -42,12 +42,12 @@
           </ul>
             <ul class="navbar-nav ms-auto">
                 <li id="nav-register" class="nav-item me-3">
-                    <a class="nav-link">
+                    <a class="nav-link" href="{{url_for('register')}}">
                         Register
                     </a>
                 </li>
               <li id="nav-login"  class="nav-item me-5">
-                    <a class="nav-link">
+                    <a class="nav-link" href="{{url_for('login')}}">
                         Login
                     </a>
                 </li>
