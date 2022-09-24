@@ -72,9 +72,11 @@ def register():
         email = form.email.data
         username = form.username.data
         if User.query.filter_by(email=email).first():
-            return redirect(url_for("index"))
+            flash("Email is already in use")
+            return redirect(url_for("login"))
         if User.query.filter_by(username=username).first():
-            return redirect(url_for("index"))
+            flash("Username is already on use")
+            return redirect(url_for("register"))
         hashed_pw = generate_password_hash(
             form.password.data,
             method='pbkdf2:sha256',

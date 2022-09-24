@@ -55,6 +55,14 @@
   margin-top:10%;
 }
 
+    /* Flashed messages */
+
+.flashed_message{
+  font-size:1.5rem;
+  color:red;
+  text-align:center;
+}
+
 
     /* Forms */
 
