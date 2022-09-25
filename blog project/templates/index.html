@@ -8,7 +8,7 @@
         <div class="col-lg-8 col-md-10 mx-auto">
           <div class="site-heading text-center">
             <h1 class="page-header-heading mb-3"> Blavg the Blog</h1>
-            <span class="subheading">Currently has no content, sorry</span>
+            <span class="subheading">*cricket noises*</span>
           </div>
         </div>
       </div>
@@ -26,15 +26,15 @@
 
         {% for post in posts %}
         <div class="post-preview">
-          <a href="#" class="post-preview-link">
-            <h2 class="post-title">
+          <a href="{{ url_for('show_post', post_id=post.id) }}" class="post-preview-link">
+            <h2 class="post-preview-title">
               {{post.title}}
             </h2>
-            <h3 class="post-subtitle">
+            <h3 class="post-preview-subtitle">
               {{post.subtitle}}
             </h3>
           </a>
-          <p class="post-author">Posted by
+          <p class="post-preview-author-and-date">Posted by
             <a href="#">{{post.author.username}}</a>
             on {{post.date}}
           </p>
@@ -48,10 +48,5 @@
     </div>
   </div>
 
-
-
-  <hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr>
-  <hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr>
-  <hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr><hr>
 
 {% include "footer.html" %}

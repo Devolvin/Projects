@@ -77,13 +77,24 @@
   color: #008699;
 }
 
-.post-subtitle{
+.post-preview-subtitle{
   font-size:1.5rem;
   font-weight:300;
 }
 
 .create-post-btn {
   margin: 2% 0%;
+}
+
+    /* Post Page */
+
+
+.post-author-and-date {
+  font-weight:500;
+}
+
+p{
+  overflow-wrap: break-word;
 }
 
     /* Flashed messages */

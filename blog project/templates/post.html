@@ -1,0 +1,33 @@
+{% include "header.html" %}
+
+  <!-- Page Header -->
+<header class="page-header" style="background-image:linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+  url('https://cdn.pixabay.com/photo/2016/04/30/13/12/sutterlin-1362879_960_720.jpg')">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="site-heading text-center" >
+            <h1 class="post-title mb-3"style="color:white"> {{post.title}} </h1>
+            <h2 class="post-subtitle" style="color:white"> {{post.subtitle}}  </h2>
+              <span class="post-author-and-date" style="color:white">Posted by
+              <a href="#">{{post.author.username}}</a>
+              on {{post.date}}</span>
+          </div>
+        </div>
+
+
+</header>
+
+  <!-- Post Content -->
+  <article>
+        <div class="col-lg-8 col-md-10 mx-auto">
+            {{ post.body|safe }}
+        </div>
+      </div>
+    </div>
+  </article>
+
+
+
+
+{% include "footer.html" %}
