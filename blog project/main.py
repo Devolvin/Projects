@@ -1,12 +1,13 @@
-from flask import Flask, render_template, redirect, url_for, flash
+from flask import Flask, render_template, redirect, url_for, flash, abort
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
-from flask_login import UserMixin, login_user, LoginManager, current_user, login_required, logout_user
+from flask_login import UserMixin, login_user, LoginManager, current_user, login_required, logout_user, AnonymousUserMixin
 from flask_bootstrap import Bootstrap
 from forms import RegisterForm , LoginForm , CreatePostForm
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_ckeditor import CKEditor
 from datetime import date
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'q#f12]4b\J5VVc419F2F]pU'
@@ -14,6 +15,14 @@ Bootstrap(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 ckeditor = CKEditor(app)
+
+class Anonymous(AnonymousUserMixin):
+  def __init__(self):
+    self.admin_level = 0
+    self.id = 0
+
+login_manager.anonymous_user = Anonymous
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -118,20 +127,20 @@ def logout():
 @app.route("/new_post", methods=["GET","POST"])
 @login_required
 def add_new_post():
-    print(current_user)
-    form = CreatePostForm()
-    if form.validate_on_submit():
-        new_post = BlogPost(
-            title = form.title.data,
-            subtitle = form.subtitle.data,
-            body = form.body.data,
-            author = current_user,
-            date = date.today().strftime("%B %d, %Y")
-        )
-        db.session.add(new_post)
-        db.session.commit()
-        return redirect(url_for("index"))
-    return render_template("make_post.html", form=form)
+    if current_user.admin_level > 1:
+        form = CreatePostForm()
+        if form.validate_on_submit():
+            new_post = BlogPost(
+                title = form.title.data,
+                subtitle = form.subtitle.data,
+                body = form.body.data,
+                author = current_user,
+                date = date.today().strftime("%B %d, %Y")
+            )
+            db.session.add(new_post)
+            db.session.commit()
+            return redirect(url_for("index"))
+        return render_template("make_post.html", form=form)
 
 
 @app.route("/post/<int:post_id>")
@@ -143,26 +152,31 @@ def show_post(post_id):
 @app.route("/edit_post/<int:post_id>", methods=["GET","POST"])
 def edit_post(post_id):
     post = BlogPost.query.get(post_id)
-    edit_form = CreatePostForm(
-        title = post.title,
-        subtitle = post.subtitle,
-        author = post.author,
-        body = post.body
-    )
-    if edit_form.validate_on_submit():
-        post.title = edit_form.title.data
-        post.subtitle = edit_form.subtitle.data
-        post.body = edit_form.body.data
-        db.session.commit()
-        return redirect(url_for("show_post", post_id=post.id))
-    return render_template("make_post.html", form = edit_form, is_edit = True)
+    if current_user.admin_level > 2 or current_user.id == post.author.id:
+        edit_form = CreatePostForm(
+            title = post.title,
+            subtitle = post.subtitle,
+            author = post.author,
+            body = post.body
+        )
+        if edit_form.validate_on_submit():
+            post.title = edit_form.title.data
+            post.subtitle = edit_form.subtitle.data
+            post.body = edit_form.body.data
+            db.session.commit()
+            return redirect(url_for("show_post", post_id=post.id))
+        return render_template("make_post.html", form = edit_form, is_edit = True)
 
-@app.route("/edit_post/<int:post_id>", methods=["GET","POST"])
+@login_required
+@app.route("/delete_post/<int:post_id>", methods=["GET","POST"])
 def delete_post(post_id):
     post = BlogPost.query.get(post_id)
-    db.session.delete(post)
-    db.session.commit()
-    return redirect(url_for("index"))
+    if current_user.admin_level > 2 or current_user.id == post.author.id:
+        db.session.delete(post)
+        db.session.commit()
+        return redirect(url_for("index"))
+    else:
+        abort(401)
 
 
 

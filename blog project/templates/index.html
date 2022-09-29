@@ -15,13 +15,15 @@
     </div>
   </header>
 
-    <!-- Main Content / perhaps i could switch to flexboxes-->
+    <!-- Main Content -->
 
   <div class="container">
     <div class="row">
       <div class="col-lg-8 col-md-10 mx-auto">
         <div class="clearfix">
+          {% if current_user.admin_level > 1 %}
           <a class="btn btn-primary float-start create-post-btn" href="{{url_for('add_new_post')}}">Create New Post</a>
+          {% endif %}
         </div>
 
         {% for post in posts %}
@@ -41,7 +43,9 @@
         </div>
         {% endfor %}
         <div class="clearfix">
+          {% if current_user.admin_level > 1 %}
           <a class="btn btn-primary float-start create-post-btn" href="{{url_for('add_new_post')}}">Create New Post</a>
+          {% endif %}
         </div>
 
       </div>
