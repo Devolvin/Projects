@@ -97,6 +97,13 @@ p{
   overflow-wrap: break-word;
 }
 
+    /* Question */
+
+.highlighted {
+    color: #880808;
+    font-style: italic;
+}
+
     /* Flashed messages */
 
 

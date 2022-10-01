@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, flash, abort
+from flask import Flask, render_template, redirect, url_for, flash, abort, request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
 from flask_login import UserMixin, login_user, LoginManager, current_user, login_required, logout_user, AnonymousUserMixin
@@ -7,6 +7,7 @@ from forms import RegisterForm , LoginForm , CreatePostForm
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_ckeditor import CKEditor
 from datetime import date
+from tfidf import calculate_tfidf
 
 
 app = Flask(__name__)
@@ -118,14 +119,14 @@ def login():
         return redirect(url_for("index"))
     return render_template("login.html",form=form)
 
-@app.route("/logout")
 @login_required
+@app.route("/logout")
 def logout():
     logout_user()
     return redirect(url_for("index"))
 
-@app.route("/new_post", methods=["GET","POST"])
 @login_required
+@app.route("/new_post", methods=["GET","POST"])
 def add_new_post():
     if current_user.admin_level > 1:
         form = CreatePostForm()
@@ -177,6 +178,19 @@ def delete_post(post_id):
         return redirect(url_for("index"))
     else:
         abort(401)
+
+
+@app.route("/question",methods=["GET"])
+def question():
+    posts = BlogPost.query.all()
+    query = request.args.get("query")
+    top_post_and_sentence = calculate_tfidf(posts,query)
+    if top_post_and_sentence[1][0][3:] == "<p>":
+        top_post_and_sentence[1][0] = top_post_and_sentence[1][0][-3:]
+    if top_post_and_sentence[1][0][-4:] == "</p>":
+        top_post_and_sentence[1][0] =  top_post_and_sentence[1][0][:-4]
+    return render_template("post.html", post=top_post_and_sentence[0], sentence=top_post_and_sentence[1][0], query=query)
+
 
 
 

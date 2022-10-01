@@ -1,13 +1,21 @@
 {% include "header.html" %}
 
   <!-- Page Header -->
+{% if sentence %}
 <header class="page-header" style="background-image:linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+  url('https://cdn.pixabay.com/photo/2016/11/30/12/16/question-mark-1872665_960_720.jpg')">
+{% else %}<header class="page-header" style="background-image:linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
   url('https://cdn.pixabay.com/photo/2016/04/30/13/12/sutterlin-1362879_960_720.jpg')">
+{% endif %}
     <div class="container">
       <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
           <div class="site-heading text-center" >
-            <h1 class="post-title mb-3"style="color:white"> {{post.title}} </h1>
+            <h1 class="post-title mb-3"style="color:white">
+                {% if sentence %}
+                    We found your answer in: <br><br>
+                {% endif %}
+                {{post.title}} </h1>{{post.title}} </h1>
             <h2 class="post-subtitle" style="color:white"> {{post.subtitle}}  </h2>
               <span class="post-author-and-date" style="color:white">Posted by
               <a href="#">{{post.author.username}}</a>
@@ -15,9 +23,24 @@
           </div>
         </div>
       </div>
-
-
+    </div>
 </header>
+
+  <!-- Question  -->
+
+
+    <div class="col-lg-8 col-md-10 mx-auto">
+        {% if sentence %}
+            <div class="row my-3 text-center">
+                <h3>Your Question was: {{query}}</h3>
+                <h3 class="highlighted">{{sentence|safe}}</h3><br><br><hr>
+                <h4 class="float-middle"> Here's the full post: </h4><br><br>
+            </div>
+        {% endif %}
+    </div>
+
+
+
 
   <!-- Post Content -->
   <article>

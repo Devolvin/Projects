@@ -15,6 +15,17 @@
     </div>
   </header>
 
+    <!-- Question Form -->
+
+    <div class="container">
+      <div class="col-lg-8 col-md-10 mx-auto">
+        <form class="d-flex mt-3" action="{{url_for('question')}}" method="GET">
+            <input class="form-control me-2" type="text" placeholder="Ask a question! eg. Who created python?" name="query">
+            <button class="btn btn-outline-success" type="submit">Ask</button>
+        </form>
+        </div>
+    </div>
+
     <!-- Main Content -->
 
   <div class="container">
