@@ -1,0 +1,27 @@
+{% include "header.html" %}
+
+<header class="page-header" style="background-image:linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+  url('https://cdn.pixabay.com/photo/2018/03/15/16/24/water-3228727_960_720.jpg')">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="site-heading text-center" >
+            <h1 class="page-header-heading mb-3"style="color:white">About</h1>
+            <span class="subheading" style="color:white">Explanation of question</span>
+          </div>
+        </div>
+      </div>
+    </div>
+</header>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-md-10 mt-3 mx-auto">
+          <span class="about-text">This is a (pretty unattractive) blog website I made using flask with
+              a question answerer feature. Question answering is done by implementing an algorithm called
+              <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf">tf-idf</a>.</span>
+      </div>
+    </div>
+  </div>
+
+{% include "footer.html" %}

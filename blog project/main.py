@@ -205,7 +205,9 @@ def question():
         top_post_and_sentence[1][0] =  top_post_and_sentence[1][0][:-4]
     return render_template("post.html", post=top_post_and_sentence[0], sentence=top_post_and_sentence[1][0], query=query)
 
-
+@app.route("/about")
+def about():
+    return render_template("about.html")
 
 
 if __name__ == "__main__":
