@@ -20,3 +20,7 @@ class CreatePostForm(FlaskForm):
     subtitle = StringField("Subtitle", validators=[DataRequired()])
     body = CKEditorField("Blog Content", validators=[DataRequired()])
     submit = SubmitField("Submit Post")
+
+class CommentForm(FlaskForm):
+    comment = CKEditorField("Your Comment", validators=[DataRequired()])
+    submit = SubmitField("Submit Comment")

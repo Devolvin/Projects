@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
 from flask_login import UserMixin, login_user, LoginManager, current_user, login_required, logout_user, AnonymousUserMixin
 from flask_bootstrap import Bootstrap
-from forms import RegisterForm , LoginForm , CreatePostForm
+from forms import RegisterForm , LoginForm , CreatePostForm, CommentForm
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_ckeditor import CKEditor
 from datetime import date
@@ -144,10 +144,24 @@ def add_new_post():
         return render_template("make_post.html", form=form)
 
 
-@app.route("/post/<int:post_id>")
+@app.route("/post/<int:post_id>", methods=["GET","POST"])
 def show_post(post_id):
     requested_post = BlogPost.query.get(post_id)
-    return render_template("post.html",post=requested_post)
+    form = CommentForm()
+    if form.validate_on_submit():
+        if current_user.is_authenticated:
+            new_comment = Comment(
+                comment = form.comment.data,
+                author_id = current_user.id,
+                post_id = post_id
+            )
+            db.session.add(new_comment)
+            db.session.commit()
+            return redirect(url_for("show_post", post_id=post_id))
+        else:
+            flash("You need to be logged in to comment")
+            return redirect(url_for("login"))
+    return render_template("post.html",post=requested_post, form=form)
 
 @login_required
 @app.route("/edit_post/<int:post_id>", methods=["GET","POST"])

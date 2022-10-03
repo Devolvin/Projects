@@ -1,10 +1,12 @@
 {% include "header.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
 
   <!-- Page Header -->
 {% if sentence %}
 <header class="page-header" style="background-image:linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
   url('https://cdn.pixabay.com/photo/2016/11/30/12/16/question-mark-1872665_960_720.jpg')">
-{% else %}<header class="page-header" style="background-image:linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+{% else %}
+<header class="page-header" style="background-image:linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
   url('https://cdn.pixabay.com/photo/2016/04/30/13/12/sutterlin-1362879_960_720.jpg')">
 {% endif %}
     <div class="container">
@@ -15,7 +17,7 @@
                 {% if sentence %}
                     We found your answer in: <br><br>
                 {% endif %}
-                {{post.title}} </h1>{{post.title}} </h1>
+                {{post.title}} </h1>
             <h2 class="post-subtitle" style="color:white"> {{post.subtitle}}  </h2>
               <span class="post-author-and-date" style="color:white">Posted by
               <a href="#">{{post.author.username}}</a>
@@ -43,8 +45,8 @@
 
 
   <!-- Post Content -->
-  <article>
-        <div class="col-lg-8 col-md-10 mx-auto">
+
+        <div class="col-lg-8 col-md-10 mx-auto my-3">
             {{ post.body|safe }}
             <hr>
             <div class="clearfix">
@@ -54,8 +56,38 @@
                 {% endif %}
         </div>
       </div>
+
+    <div class="row">
+        {% if not sentence %}
+        {% if current_user.is_authenticated %}
+        <div class=" col-lg-6 clog-md-8 mx-auto">
+          {{ ckeditor.load() }}
+          {{ ckeditor.config(name='comment') }}
+          {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "primary"}) }}
+        </div>
+        {% endif %}
+        {% if post.comments %}
+        <div class="col-lg-8 col-md-10 mx-auto mt-4">
+            <h3 class="text-center my-3"> Comment Section </h3>
+              <ul class="comment-list">
+                <li class="my-1">
+                  {% for comment in post.comments %}
+                    <div>
+                      <p>{{comment.comment|safe}}</p>
+                      <span>Posted by <a href="#">{{comment.author.username}}</a></span>
+                        <hr>
+                    </div>
+                  {% endfor %}
+                </li>
+              </ul>
+            </div>
+        {% endif %}
+        {% endif %}
     </div>
-  </article>
+
+
+    </div>
+
 
 
 

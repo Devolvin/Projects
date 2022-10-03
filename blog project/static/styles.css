@@ -121,6 +121,15 @@ p{
   margin-top:1%;
 }
 
+    /* Comment Section */
+
+.comment-list{
+    list-style-type: none;
+    border-style: groove;
+    padding: 0 2rem;
+
+}
+
 
     /* Footer */
 
