@@ -4,8 +4,22 @@ import math
 import html
 
 
-def calculate_tfidf(posts: list, q):
-    def tokenize(text):
+class Tfidf_Calculator():
+    def __init__(self,posts):
+        self.post_dict = dict()
+        self.post_words = dict()
+        for post in posts:
+            post.body = post.body.replace("\r\n", "")
+            if post.body[:3] == "<p>":
+                post.body = post.body[3:]
+            if post.body[-4:] == "</p>":
+                post.body = post.body[:-4]
+            self.post_dict[post.id] = html.unescape(post.body)
+            self.post_words[post.id] = self.tokenize(html.unescape(post.body))
+        self.post_idfs = self.compute_idf(self.post_words)
+
+
+    def tokenize(self,text):
         punct = string.punctuation
         stopwords = nltk.corpus.stopwords.words("english")
         word_list = nltk.word_tokenize(text.lower())
@@ -13,10 +27,9 @@ def calculate_tfidf(posts: list, q):
                      not all(letter in punct for letter in word) and word not in stopwords]
         return word_list
 
-    def compute_idf(texts_dict):
+    def compute_idf(self,texts_dict):
         frequency_dict = dict()
         idf_dict = dict()
-
         for text in texts_dict:
             for word in set(texts_dict[text]):
                 if word not in frequency_dict.keys():
@@ -29,7 +42,7 @@ def calculate_tfidf(posts: list, q):
 
         return idf_dict
 
-    def top_post(query, posts_words, idfs):
+    def top_post(self,query, posts_words, idfs):
 
         tfidfs = dict()
 
@@ -42,7 +55,7 @@ def calculate_tfidf(posts: list, q):
 
         return max(tfidfs, key=lambda key: tfidfs[key])
 
-    def top_sentence(query, sentences, idfs):
+    def top_sentence(self, query, sentences, idfs):
 
         match_measure = dict()
         for sentence in sentences:
@@ -54,32 +67,29 @@ def calculate_tfidf(posts: list, q):
                     match_measure[sentence][0] += idfs[word]
                     count += 1
             match_measure[sentence][1] = count / length
-
+        # print(match_measure)
         return list(max((match_measure.items()), key=lambda x: (x[1][0], x[1][1])))
 
-    post_dict = {
-        post: html.unescape(post.body) for post in posts
-    }
+    def find_post_and_sentence(self,q):
+        query = set(self.tokenize(html.unescape(q)))
+        searched_post = self.top_post(query,self.post_words,self.post_idfs)
+        sentences = dict()
+        for passage in self.post_dict[searched_post].split("\n"):
+            for sentence in nltk.sent_tokenize(passage):
+                tokens = self.tokenize(sentence)
+                if tokens:
+                    sentences[sentence] = tokens
+        sentence_idfs = self.compute_idf(sentences)
+        searched_sentence = self.top_sentence(query, sentences, sentence_idfs)
+        return [searched_post, searched_sentence]
 
-    post_words = dict()
-    for post in posts:
-        tokens = tokenize(html.unescape(post.body))
-        post_words[post] = tokens
-
-    post_idfs = compute_idf(post_words)
-
-    query = set(tokenize(html.unescape(q)))
-
-    searched_post = top_post(query, post_words, post_idfs)
-
-    sentences = dict()
-    for passage in post_dict[searched_post].split("\n"):
-        for sentence in nltk.sent_tokenize(passage):
-            tokens = tokenize(sentence)
-            if tokens:
-                sentences[sentence] = tokens
-
-    idfs = compute_idf(sentences)
-
-    searched_sentence = top_sentence(query, sentences, idfs)
-    return [searched_post, searched_sentence]
+    def recalculate_tfidf(self,posts):
+        for post in posts:
+            post.body = post.body.replace("\r\n", "")
+            if post.body[:3] == "<p>":
+                post.body = post.body[3:]
+            if post.body[-4:] == "</p>":
+                post.body = post.body[:-4]
+            self.post_dict[post.id] = html.unescape(post.body)
+            self.post_words[post.id] = self.tokenize(html.unescape(post.body))
+        self.post_idfs = self.compute_idf(self.post_words)

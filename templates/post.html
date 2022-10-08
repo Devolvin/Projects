@@ -27,6 +27,7 @@
       </div>
     </div>
 </header>
+</header>
 
   <!-- Question  -->
 
@@ -35,7 +36,7 @@
         {% if sentence %}
             <div class="row my-3 text-center">
                 <h3>Your Question was: {{query}}</h3>
-                <h3 class="highlighted">{{sentence|safe}}</h3><br><br><hr>
+                <h3 class="answer">{{sentence|safe}}</h3><br><br><hr>
                 <h4 class="float-middle"> Here's the full post: </h4><br><br>
             </div>
         {% endif %}
@@ -47,7 +48,9 @@
   <!-- Post Content -->
 
         <div class="col-lg-8 col-md-10 mx-auto my-3">
+            <p class="post-body">
             {{ post.body|safe }}
+            </p>
             <hr>
             <div class="clearfix">
                 {% if current_user.admin_level > 2 or current_user.id == post.author.id %}
@@ -85,11 +88,8 @@
         {% endif %}
     </div>
 
-
-    </div>
-
-
-
-
+{% if sentence %}
+<script type="text/javascript" src="../static/question.js"></script>
+{% endif %}
 
 {% include "footer.html" %}

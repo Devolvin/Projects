@@ -99,9 +99,13 @@ p{
 
     /* Question */
 
-.highlighted {
+.answer {
     color: #880808;
     font-style: italic;
+}
+
+.highlighted {
+    background-color:yellow;
 }
 
     /* Flashed messages */

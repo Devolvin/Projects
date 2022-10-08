@@ -7,7 +7,8 @@ from forms import RegisterForm , LoginForm , CreatePostForm, CommentForm
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_ckeditor import CKEditor
 from datetime import date
-from tfidf import calculate_tfidf
+import html
+from tfidf import Tfidf_Calculator
 
 
 app = Flask(__name__)
@@ -72,6 +73,7 @@ class Comment(db.Model):
 
 
 db.create_all()
+tfidf_calc = Tfidf_Calculator(BlogPost.query.all())
 
 @app.route("/")
 def index():
@@ -140,6 +142,7 @@ def add_new_post():
             )
             db.session.add(new_post)
             db.session.commit()
+            tfidf_calc.recalculate_tfidf(BlogPost.query.all())
             return redirect(url_for("index"))
         return render_template("make_post.html", form=form)
 
@@ -179,6 +182,7 @@ def edit_post(post_id):
             post.subtitle = edit_form.subtitle.data
             post.body = edit_form.body.data
             db.session.commit()
+            tfidf_calc.recalculate_tfidf(BlogPost.query.all())
             return redirect(url_for("show_post", post_id=post.id))
         return render_template("make_post.html", form = edit_form, is_edit = True)
 
@@ -189,6 +193,7 @@ def delete_post(post_id):
     if current_user.admin_level > 2 or current_user.id == post.author.id:
         db.session.delete(post)
         db.session.commit()
+        tfidf_calc.recalculate_tfidf(BlogPost.query.all())
         return redirect(url_for("index"))
     else:
         abort(401)
@@ -196,14 +201,18 @@ def delete_post(post_id):
 
 @app.route("/question",methods=["GET"])
 def question():
-    posts = BlogPost.query.all()
     query = request.args.get("query")
-    top_post_and_sentence = calculate_tfidf(posts,query)
-    if top_post_and_sentence[1][0][3:] == "<p>":
-        top_post_and_sentence[1][0] = top_post_and_sentence[1][0][-3:]
-    if top_post_and_sentence[1][0][-4:] == "</p>":
-        top_post_and_sentence[1][0] =  top_post_and_sentence[1][0][:-4]
-    return render_template("post.html", post=top_post_and_sentence[0], sentence=top_post_and_sentence[1][0], query=query)
+    top_post_and_sentence = tfidf_calc.find_post_and_sentence(query)
+    post = BlogPost.query.get(top_post_and_sentence[0])
+    post.body = post.body.replace("\r\n","")
+    if post.body[:3] == "<p>":
+        post.body = post.body[3:]
+    if post.body[-4:] == "</p>":
+        post.body = post.body[:-4]
+    post.body = html.unescape(post.body).replace(top_post_and_sentence[1][0],
+                                  f"<span class='highlighted'>{top_post_and_sentence[1][0]}</span>")
+    print(top_post_and_sentence[1][0])
+    return render_template("post.html", post=post, sentence=top_post_and_sentence[1][0], query=query)
 
 @app.route("/about")
 def about():
