@@ -129,9 +129,16 @@ p{
 
 .comment-list{
     list-style-type: none;
-    border-style: groove;
     padding: 0 2rem;
 
+}
+
+.each-comment {
+    padding: 0.01rem 1rem 0.5rem 2rem  ;
+    border-radius: 4px;
+	box-shadow: 10px 10px 5px #aaaaaa;
+	background-color: #eee;
+	font-size:1.1rem;
 }
 
     /* About Page */

@@ -63,6 +63,7 @@
     <div class="row">
         {% if not sentence %}
         {% if current_user.is_authenticated %}
+        <h3 class="text-center mb-3 mt-2"> Comment Section </h3>
         <div class=" col-lg-6 clog-md-8 mx-auto">
           {{ ckeditor.load() }}
           {{ ckeditor.config(name='comment') }}
@@ -71,17 +72,17 @@
         {% endif %}
         {% if post.comments %}
         <div class="col-lg-8 col-md-10 mx-auto mt-4">
-            <h3 class="text-center my-3"> Comment Section </h3>
               <ul class="comment-list">
-                <li class="my-1">
                   {% for comment in post.comments %}
-                    <div>
-                      <p>{{comment.comment|safe}}</p>
+                  <li>
+                    <div class="each-comment">
+                      <p class="px-6">{{comment.comment|safe}}</p>
+                        <i class="far fa-lg fa-user me-1"></i>
                       <span>Posted by <a href="#">{{comment.author.username}}</a></span>
-                        <hr>
                     </div>
+                  </li>
+                  <br>
                   {% endfor %}
-                </li>
               </ul>
             </div>
         {% endif %}
